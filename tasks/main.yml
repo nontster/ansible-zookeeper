@@ -137,6 +137,28 @@
   tags:
     - zookeeper_config
 
+- name: Template JAAS configuration file to zookeeper_jaas.conf
+  template:
+    src: zookeeper_jaas.conf.j2
+    dest: "{{ zookeeper_dir }}/conf/zookeeper_jaas.conf"
+    group: "{{ zookeeper_group }}"
+    owner: "{{ zookeeper_user }}"
+    mode: 0644
+  notify:
+    - Restart ZooKeeper service
+  tags:
+    - zookeeper_config
+
+- name: Create symlink to ZooKeeper configuration file
+  file:
+    src: "{{ zookeeper_dir }}/conf/zookeeper_jaas.conf"
+    dest: /etc/zookeeper/zookeeper_jaas.conf
+    state: link
+    group: "{{ zookeeper_group }}"
+    owner: "{{ zookeeper_user }}"
+  tags:
+    - zookeeper_config
+
 - name: Template myid to {{ zookeeper_data_dir }}/myid
   template:
     src: myid.j2

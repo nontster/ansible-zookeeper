@@ -48,6 +48,15 @@ autopurge.purgeInterval={{ zookeeper_purge_interval }}
 server.{{ hostvars[host].zookeeper_id | default(zookeeper_id) }}={{ host }}:{{ zookeeper_leader_port }}:{{ zookeeper_election_port }}
 {% endfor %}
 
+# Enable ZooKeeper Authentication with SASL
+{% for host in zookeeper_servers %}
+authProvider.{{ hostvars[host].zookeeper_id | default(zookeeper_id) }}=org.apache.zookeeper.server.auth.SASLAuthenticationProvider
+{% endfor %}
+# Authenticating brokers with ZooKeeper
+zookeeper.set.acl=true
+# Require All Connections to use SASL Authentication
+requireClientAuthScheme=sasl
+
 {% if zookeeper_version is version('3.5', '>=') %}
 # AdminServer
 admin.enableServer={{ zookeeper_enable_server | ternary('true', 'false') }}

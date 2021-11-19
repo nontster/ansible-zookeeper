@@ -63,7 +63,8 @@ zookeeper_id: 1
 zookeeper_leader_port: 2888
 zookeeper_election_port: 3888
 zookeeper_servers: "{{ groups['clusterNodes'] }}"
-zookeeper_environment: {}
+zookeeper_environment:
+  SERVER_JVMFLAGS: "-Djava.security.auth.login.config=/etc/zookeeper/zookeeper_jaas.conf"
 
 # Set to "false" to disable the AdminServer. By default the AdminServer is enabled.
 zookeeper_enable_server: yes
